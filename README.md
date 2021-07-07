@@ -6,7 +6,15 @@ https://api.travis-ci.org/kodguru/puppet-module-nfsclient.png?branch=master)](ht
 
 Puppet module to manage nfs client configuration.
 
-NOTE: This module does not manage /etc/krb5.keytab any more.
+# Compatability
+
+This module has been tested to work on the following systems with Puppet
+versions 5, 6 and 7 with the Ruby version associated with those releases.
+This module aims to support the current and previous major Puppet versions.
+
+# Note
+
+This module does not manage /etc/krb5.keytab any more.
 Use a Keberos module such as [kodguru/puppet-module-krb5](https://github.com/kodguru/puppet-module-krb5/)
 (version 0.8.0 or newer) if you need to manage Kerberos itself.
 
@@ -25,6 +33,8 @@ if defined(File['krb5keytab_file']) {
 ```
 If statement is in case File['krb5keytab_file'] is relevant if it could be catalogues
 missing this resource.
+
+# Parameters
 
 gss
 ---
