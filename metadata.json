@@ -1,40 +1,65 @@
 {
-  "name":         "kodguru-nfsclient",
-  "version":      "1.1.0",
-  "author":       "kodguru",
-  "summary":      "Manage nfs client",
-  "license":      "Apache-2.0",
-  "source":       "git://github.com/kodguru/puppet-module-nfsclient.git",
+  "name": "kodguru-nfsclient",
+  "version": "1.1.0",
+  "author": "kodguru",
+  "summary": "Manage nfs client",
+  "license": "Apache-2.0",
+  "source": "git://github.com/kodguru/puppet-module-nfsclient.git",
   "project_page": "https://github.com/kodguru/puppet-module-nfsclient",
-  "issues_url":   "https://github.com/kodguru/puppet-module-nfsclient/issues",
-  "description":  "Manage nfs client",
+  "issues_url": "https://github.com/kodguru/puppet-module-nfsclient/issues",
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.6.0 < 8.0.0"
+    },
+    {
+      "name": "ghoneycutt/rpcbind",
+      "version_requirement": ">= 1.8.0 < 2.0.0"
+    },
+    {
+      "name": "ghoneycutt/nfs",
+      "version_requirement": ">= 1.11.3 < 2.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "SLES",
+      "operatingsystemrelease": [
+        "11",
+        "12"
+      ]
+    },
+    {
+      "operatingsystem": "SLED",
+      "operatingsystemrelease": [
+        "11",
+        "12"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6",
+        "7",
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "16.04",
+        "18.04"
+      ]
+    }
+  ],
   "requirements": [
     {
       "name": "puppet",
       "version_requirement": ">= 3.0.0 < 7.0.0"
     }
   ],
-  "operatingsystem_support": [
-    {
-      "operatingsystem": "SLES",
-      "operatingsystemrelease": ["11","12"]
-    },
-    {
-      "operatingsystem": "SLED",
-      "operatingsystemrelease": ["11","12"]
-    },
-    {
-      "operatingsystem": "RedHat",
-      "operatingsystemrelease": ["6","7", "8"]
-    },
-    {
-      "operatingsystem": "Ubuntu",
-      "operatingsystemrelease": ["16.04","18.04"]
-    }
-  ],
-  "dependencies": [
-    { "name": "puppetlabs/stdlib","version_requirement": ">= 4.6.0 < 6.0.0" },
-    { "name": "ghoneycutt/rpcbind","version_requirement": ">= 1.8.0" },
-    { "name": "ghoneycutt/nfs","version_requirement": ">= 1.11.3" }
-  ]
+  "description": "Manage nfs client",
+  "pdk-version": "2.1.1",
+  "template-url": "pdk-default#2.1.1",
+  "template-ref": "tags/2.1.1-0-g03daa92"
 }
