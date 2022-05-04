@@ -1,4 +1,15 @@
-# nfsclient
+# nfsclient class
+#
+# @summary Manage nfs client and secure communication (krb)
+#
+# @example Declaring the class
+#   include nfsclient
+#
+# @param gss
+#   Configure GSS. Class does nothing without this being set to true.
+#
+# @param keytab
+#   Location of keytab file in configuration files.
 class nfsclient (
   Variant[Boolean, String]   $gss    = false,
   Optional[Stdlib::Unixpath] $keytab = undef,
