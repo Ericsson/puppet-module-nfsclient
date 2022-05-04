@@ -20,11 +20,17 @@ class nfsclient (
         /^[67]/ => 'sysconfig',
         default => 'service',
       }
-      $module_service    = 'auth-rpcgss-module.service'
+      $module_service    = $::operatingsystemrelease ? {
+        /^[678]/ => 'auth-rpcgss-module.service',
+        default  => 'gssproxy',
+      }
       $gss_line          = 'SECURE_NFS'
       $keytab_line       = 'RPCGSSDARGS'
       $nfs_sysconf       = '/etc/sysconfig/nfs'
-      $nfs_requires      = Service['idmapd_service']
+      $nfs_requires      = $::operatingsystemrelease ? {
+        /^[5678]/ => Service['idmapd_service'],
+        default   => undef,
+      }
       $service           = $::operatingsystemrelease ? {
         /^6/    => 'rpcgssd',
         default => 'rpc-gssd',

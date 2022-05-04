@@ -15,6 +15,10 @@ describe 'nfsclient' do
       osfamily:               'RedHat',
       operatingsystemrelease: '8.0',
     },
+    'RedHat 9' => {
+      osfamily:               'RedHat',
+      operatingsystemrelease: '9.0',
+    },
     'Suse 11' => {
       osfamily:               'Suse',
       operatingsystemrelease: '11.3',
