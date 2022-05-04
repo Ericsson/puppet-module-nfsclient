@@ -33,17 +33,3 @@ if defined(File['krb5keytab_file']) {
 ```
 If statement is in case File['krb5keytab_file'] is relevant if it could be catalogues
 missing this resource.
-
-# Parameters
-
-gss
----
-Enable GSS. Bool.
-
-- *Default*: false
-
-keytab
-------
-Location of keytab.
-
-- *Default*: undef
