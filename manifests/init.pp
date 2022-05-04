@@ -1,17 +1,13 @@
 # nfsclient
 class nfsclient (
-  $gss    = false,
-  $keytab = undef,
+  Variant[Boolean, String]   $gss    = false,
+  Optional[Stdlib::Unixpath] $keytab = undef,
 ) {
 
   if is_bool($gss) == true {
     $gss_bool = $gss
   } else {
     $gss_bool = str2bool($gss)
-  }
-
-  if $keytab != undef {
-    validate_absolute_path($keytab)
   }
 
   case $::osfamily {

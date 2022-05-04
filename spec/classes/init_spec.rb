@@ -878,45 +878,4 @@ describe 'nfsclient' do
       expect { is_expected.to contain_class(:subject) }.to raise_error(Puppet::Error, %r{nfsclient module only supports})
     end
   end
-
-  describe 'variable type and content validations' do
-    validations = {
-      'absolute_path' => {
-        name:    ['keytab'],
-        valid:   ['/absolute/filepath', '/absolute/directory/'],
-        invalid: ['string', ['array'], { 'ha' => 'sh' }, 3, 2.42, true, nil],
-        message: 'is not an absolute path',
-      },
-      'boolean_stringified' => {
-        name:    ['gss'],
-        valid:   [true, false, 'true', 'false'],
-        invalid: ['string', ['array'], { 'ha' => 'sh' }, 3, 2.42, nil],
-        message: 'str2bool',
-      },
-    }
-
-    validations.sort.each do |type, var|
-      var[:name].each do |var_name|
-        mandatory_params = {} if mandatory_params.nil?
-        var[:params] = {} if var[:params].nil?
-        var[:valid].each do |valid|
-          context "when #{var_name} (#{type}) is set to valid #{valid} (as #{valid.class})" do
-            let(:params) { [mandatory_params, var[:params], { "#{var_name}": valid, }].reduce(:merge) }
-
-            it { is_expected.to compile }
-          end
-        end
-
-        var[:invalid].each do |invalid|
-          context "when #{var_name} (#{type}) is set to invalid #{invalid} (as #{invalid.class})" do
-            let(:params) { [mandatory_params, var[:params], { "#{var_name}": invalid, }].reduce(:merge) }
-
-            it 'fail' do
-              expect { is_expected.to contain_class(:subject) }.to raise_error(Puppet::Error, %r{#{var[:message]}})
-            end
-          end
-        end
-      end # var[:name].each
-    end # validations.sort.each
-  end # describe 'variable type and content validations'
 end
