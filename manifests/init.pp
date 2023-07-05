@@ -31,16 +31,6 @@ class nfsclient (
   Boolean $gss                           = false,
   Optional[Stdlib::Absolutepath] $keytab = undef,
 ) {
-  if is_bool($gss) == true {
-    $gss_bool = $gss
-  } else {
-    $gss_bool = str2bool($gss)
-  }
-
-  if $keytab != undef {
-    validate_absolute_path($keytab)
-  }
-
   case $facts['os']['family'] {
     'RedHat': {
       $nfs_config_method = $facts['os']['release']['full'] ? {
@@ -97,7 +87,7 @@ class nfsclient (
     'service'   => Service['gss_service'],
   }
 
-  if $gss_bool {
+  if $gss {
     $_gssd_options_notify = [Service[rpcbind_service], Service[$service]]
 
     include rpcbind
@@ -166,7 +156,7 @@ class nfsclient (
         refreshonly => true,
         subscribe   => File_line['GSSD_OPTIONS'],
       }
-      if $gss_bool {
+      if $gss {
         Exec['nfs-config'] ~> Service[$service]
         Service['rpcbind_service'] -> Service[$service]
       }
