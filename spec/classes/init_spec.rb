@@ -4,42 +4,66 @@ describe 'nfsclient' do
 
   platform_facts = {
     'RedHat 6' => {
-      osfamily:               'RedHat',
-      operatingsystemrelease: '6.3',
+      os: {
+        family: 'RedHat',
+        release: {
+          full: '6.3',
+        },
+      },
     },
     'RedHat 7' => {
-      osfamily:               'RedHat',
-      operatingsystemrelease: '7.3',
+      os: {
+        family: 'RedHat',
+        release: {
+          full: '7.3',
+        },
+      },
     },
     'RedHat 8' => {
-      osfamily:               'RedHat',
-      operatingsystemrelease: '8.0',
-    },
-    'RedHat 9' => {
-      osfamily:               'RedHat',
-      operatingsystemrelease: '9.0',
+      os: {
+        family: 'RedHat',
+        release: {
+          full: '8.0',
+        },
+      },
     },
     'Suse 11' => {
-      osfamily:               'Suse',
-      operatingsystemrelease: '11.3',
+      os: {
+        family: 'Suse',
+        release: {
+          full: '11.3',
+        },
+      },
       lsbmajdistrelease:      '11', # rpcbind
     },
     'Suse 12' => {
-      osfamily:               'Suse',
-      operatingsystemrelease: '12.3',
+      os: {
+        family: 'Suse',
+        release: {
+          full: '12.3',
+        },
+      },
       lsbmajdistrelease:      '12', # rpcbind
     },
     'Ubuntu 16.04' => {
-      osfamily:               'Debian',
-      operatingsystemrelease: '16.04',
-      operatingsystem:        'Ubuntu',
+      os: {
+        family: 'Debian',
+        name:   'Ubuntu',
+        release: {
+          full: '16.04',
+        },
+      },
       lsbdistid:              'Ubuntu', # rpcbind
       lsbdistrelease:         '16.04',  # rpcbind
     },
     'Ubuntu 18.04' => {
-      osfamily:               'Debian',
-      operatingsystemrelease: '18.04',
-      operatingsystem:        'Ubuntu',
+      os: {
+        family: 'Debian',
+        name:   'Ubuntu',
+        release: {
+          full: '18.04',
+        },
+      },
       lsbdistid:              'Ubuntu', # rpcbind
       lsbdistrelease:         '18.04',  # rpcbind
     },
@@ -868,9 +892,13 @@ describe 'nfsclient' do
   describe 'with defaults for all parameters on Debian 9' do
     let(:facts) do
       {
-        osfamily:               'Debian',
-        operatingsystemrelease: '9.1',
-        operatingsystem:        'Debian',
+        os: {
+          family: 'Debian',
+          name:   'Debian',
+          release: {
+            full: '9.1',
+          }
+        }
       }
     end
 
@@ -878,4 +906,45 @@ describe 'nfsclient' do
       expect { is_expected.to contain_class(:subject) }.to raise_error(Puppet::Error, %r{nfsclient module only supports})
     end
   end
+
+  describe 'variable type and content validations' do
+    validations = {
+      'Stdlib::Absolutepath & Optional[Stdlib::Absolutepath]' => {
+        name:    ['keytab'],
+        valid:   ['/absolute/filepath', '/absolute/directory/'],
+        invalid: ['relative/path', 3, 2.42, ['array'], { 'ha' => 'sh' }],
+        message: 'expects a Stdlib::Absolutepath',
+      },
+      'Boolean' => {
+        name:    ['gss'],
+        valid:   [true, false],
+        invalid: ['true', 'false', 'string', 3, 2.42, ['array'], { 'ha' => 'sh' }],
+        message: 'expects a Boolean',
+      },
+    }
+
+    validations.sort.each do |type, var|
+      var[:name].each do |var_name|
+        mandatory_params = {} if mandatory_params.nil?
+        var[:params] = {} if var[:params].nil?
+        var[:valid].each do |valid|
+          context "when #{var_name} (#{type}) is set to valid #{valid} (as #{valid.class})" do
+            let(:params) { [mandatory_params, var[:params], { "#{var_name}": valid, }].reduce(:merge) }
+
+            it { is_expected.to compile }
+          end
+        end
+
+        var[:invalid].each do |invalid|
+          context "when #{var_name} (#{type}) is set to invalid #{invalid} (as #{invalid.class})" do
+            let(:params) { [mandatory_params, var[:params], { "#{var_name}": invalid, }].reduce(:merge) }
+
+            it 'fail' do
+              expect { is_expected.to contain_class(:subject) }.to raise_error(Puppet::Error, %r{#{var[:message]}})
+            end
+          end
+        end
+      end # var[:name].each
+    end # validations.sort.each
+  end # describe 'variable type and content validations'
 end
