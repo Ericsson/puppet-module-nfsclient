@@ -5,7 +5,7 @@ fixtures:
       ref: 'v8.0.0'
     rpcbind:
       repo: 'https://github.com/ghoneycutt/puppet-module-rpcbind.git'
-      ref: 'v1.8.0'
+      ref: 'v3.0.0'
     nfs:
       repo: 'https://github.com/ghoneycutt/puppet-module-nfs.git'
       ref: 'v1.11.3'
