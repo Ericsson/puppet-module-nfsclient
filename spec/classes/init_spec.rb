@@ -896,25 +896,6 @@ describe 'nfsclient' do
     # </OS independent resources>
   end
 
-  describe 'with defaults for all parameters on Debian 9' do
-    let(:facts) do
-      {
-        os: {
-          family:  'Debian',
-          name:    'Debian',
-          release: {
-            full:  '9.1',
-            major: '9',
-          }
-        }
-      }
-    end
-
-    it 'fail' do
-      expect { is_expected.to contain_class(:subject) }.to raise_error(Puppet::Error, %r{nfsclient module only supports})
-    end
-  end
-
   describe 'variable type and content validations' do
     validations = {
       'Stdlib::Absolutepath & Optional[Stdlib::Absolutepath]' => {

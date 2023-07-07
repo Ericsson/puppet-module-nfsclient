@@ -66,17 +66,10 @@ class nfsclient (
     'Debian': {
       $nfs_requires      = undef
 
-      if $facts['os']['name'] != 'Ubuntu' {
-        fail('nfsclient module only supports Suse, RedHat and Ubuntu. Debian was detected.')
-      }
-
       # Puppet 3.x Incorrectly defaults to upstart for Ubuntu >= 16.x
       Service {
         provider => 'systemd',
       }
-    }
-    default: {
-      fail("nfsclient module only supports Suse, RedHat and Ubuntu. <${facts['os']['family']}> was detected.")
     }
   }
 
