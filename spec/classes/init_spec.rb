@@ -5,52 +5,58 @@ describe 'nfsclient' do
   platform_facts = {
     'RedHat 6' => {
       os: {
-        family: 'RedHat',
+        family:  'RedHat',
         release: {
-          full: '6.3',
-        },
+          full:  '6.3',
+          major: '6',
+        }
       },
     },
     'RedHat 7' => {
       os: {
-        family: 'RedHat',
+        family:  'RedHat',
         release: {
-          full: '7.3',
+          full:  '7.3',
+          major: '7',
         },
       },
     },
     'RedHat 8' => {
       os: {
-        family: 'RedHat',
+        family:  'RedHat',
         release: {
-          full: '8.0',
+          full:  '8.0',
+          major: '8',
         },
       },
     },
     'Suse 11' => {
       os: {
-        family: 'Suse',
+        family:  'Suse',
         release: {
-          full: '11.3',
+          full:  '11.3',
+          major: '11',
         },
       },
       lsbmajdistrelease:      '11', # rpcbind
     },
     'Suse 12' => {
       os: {
-        family: 'Suse',
+        family:  'Suse',
         release: {
-          full: '12.3',
+          full:  '12.3',
+          major: '12',
         },
       },
       lsbmajdistrelease:      '12', # rpcbind
     },
     'Ubuntu 16.04' => {
       os: {
-        family: 'Debian',
-        name:   'Ubuntu',
+        family:  'Debian',
+        name:    'Ubuntu',
         release: {
-          full: '16.04',
+          full:  '16.04',
+          major: '16.04',
         },
       },
       lsbdistid:              'Ubuntu', # rpcbind
@@ -58,10 +64,11 @@ describe 'nfsclient' do
     },
     'Ubuntu 18.04' => {
       os: {
-        family: 'Debian',
-        name:   'Ubuntu',
+        family:  'Debian',
+        name:    'Ubuntu',
         release: {
-          full: '18.04',
+          full:  '18.04',
+          major: '18.04',
         },
       },
       lsbdistid:              'Ubuntu', # rpcbind
@@ -893,10 +900,11 @@ describe 'nfsclient' do
     let(:facts) do
       {
         os: {
-          family: 'Debian',
-          name:   'Debian',
+          family:  'Debian',
+          name:    'Debian',
           release: {
-            full: '9.1',
+            full:  '9.1',
+            major: '9',
           }
         }
       }

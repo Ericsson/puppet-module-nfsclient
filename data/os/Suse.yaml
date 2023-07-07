@@ -1,0 +1,3 @@
+---
+nfsclient::gss_line:    'NFS_SECURITY_GSS'
+nfsclient::keytab_line: 'GSSD_OPTIONS'

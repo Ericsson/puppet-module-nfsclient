@@ -27,50 +27,48 @@
 # @param keytab
 #   Location of keytab.
 #
+# @param service_name
+#   Service name for gss_service.
+#
+# @param gss_line
+#   GSS line to set to 'yes', if $nfs_config_method is 'sysconfig'.
+#
+# @param keytab_line
+#   Keytab line to set to '-k ${keytab}\', if $nfs_config_method is 'sysconfig'.
+#
+# @param nfs_sysconf
+#   Path to NFS config file, if $nfs_config_method is 'sysconfig'.
+#
+# @param nfs_config_method
+#   Method of NFS service configuration. Either 'sysconfig' or 'service'.
+#
+# @param service
+#   Name of RPC service.
+#
 class nfsclient (
-  Boolean $gss                           = false,
-  Optional[Stdlib::Absolutepath] $keytab = undef,
+  Boolean                        $gss               = false,
+  Optional[Stdlib::Absolutepath] $keytab            = undef,
+  Optional[String[1]]            $service_name      = undef,
+  Optional[String[1]]            $gss_line          = undef,
+  Optional[String[1]]            $keytab_line       = undef,
+  Stdlib::Absolutepath           $nfs_sysconf       = '/etc/sysconfig/nfs',
+  String[1]                      $nfs_config_method = 'sysconfig',
+  String[1]                      $service           = 'rpc-gssd',
 ) {
   case $facts['os']['family'] {
     'RedHat': {
-      $nfs_config_method = $facts['os']['release']['full'] ? {
-        /^[67]/ => 'sysconfig',
-        default => 'service',
-      }
-      $module_service    = 'auth-rpcgss-module.service'
-      $gss_line          = 'SECURE_NFS'
-      $keytab_line       = 'RPCGSSDARGS'
-      $nfs_sysconf       = '/etc/sysconfig/nfs'
       $nfs_requires      = Service['idmapd_service']
-      $service           = $facts['os']['release']['full'] ? {
-        /^6/    => 'rpcgssd',
-        default => 'rpc-gssd',
-      }
       include nfs::idmap
     }
     'Suse': {
-      $nfs_config_method = 'sysconfig'
-      $module_service    = undef
-      $gss_line          = 'NFS_SECURITY_GSS'
-      $keytab_line       = 'GSSD_OPTIONS'
-      $nfs_sysconf       = '/etc/sysconfig/nfs'
       $nfs_requires      = undef
-      $service           = $facts['os']['release']['full'] ? {
-        /^11/   => 'nfs',
-        default => 'rpc-gssd',
-      }
     }
     'Debian': {
+      $nfs_requires      = undef
+
       if $facts['os']['name'] != 'Ubuntu' {
         fail('nfsclient module only supports Suse, RedHat and Ubuntu. Debian was detected.')
       }
-      $nfs_config_method = 'sysconfig'
-      $module_service    = undef
-      $gss_line          = 'NEED_GSSD'
-      $keytab_line       = 'GSSDARGS'
-      $nfs_sysconf       = '/etc/default/nfs-common'
-      $nfs_requires      = undef
-      $service           = 'rpc-gssd'
 
       # Puppet 3.x Incorrectly defaults to upstart for Ubuntu >= 16.x
       Service {
@@ -102,7 +100,7 @@ class nfsclient (
     } elsif $nfs_config_method == 'service' {
       service { 'gss_service':
         ensure => 'running',
-        name   => $module_service,
+        name   => $service_name,
         enable => true,
       }
     }

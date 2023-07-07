@@ -1,0 +1,4 @@
+---
+nfsclient::gss_line:    'NEED_GSSD'
+nfsclient::keytab_line: 'GSSDARGS'
+nfsclient::nfs_sysconf: '/etc/default/nfs-common'

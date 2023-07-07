@@ -1,0 +1,2 @@
+---
+nfsclient::nfs_config_method: 'sysconfig'
