@@ -55,31 +55,18 @@ class nfsclient (
   String[1]                      $nfs_config_method = 'sysconfig',
   String[1]                      $service           = 'rpc-gssd',
 ) {
-  case $facts['os']['family'] {
+  case $facts['os']['name'] {
     'RedHat': {
-      $nfs_requires      = Service['idmapd_service']
       include nfs::idmap
+      $nfs_requires = Service['idmapd_service']
     }
-    'Suse': {
-      $nfs_requires      = undef
+    default: {
+      $nfs_requires = undef
     }
-    'Debian': {
-      $nfs_requires      = undef
-
-      # Puppet 3.x Incorrectly defaults to upstart for Ubuntu >= 16.x
-      Service {
-        provider => 'systemd',
-      }
-    }
-  }
-
-  $service_subscribe = $nfs_config_method ? {
-    'sysconfig' => File_line['NFS_SECURITY_GSS'],
-    'service'   => Service['gss_service'],
   }
 
   if $gss {
-    $_gssd_options_notify = [Service[rpcbind_service], Service[$service]]
+    $_gssd_options_notify = [Service['rpcbind_service'], Service[$service]]
 
     include rpcbind
 
@@ -88,7 +75,7 @@ class nfsclient (
         path   => $nfs_sysconf,
         line   => "${gss_line}=\"yes\"",
         match  => "^${gss_line}=.*",
-        notify => 'Service[rpcbind_service]',
+        notify => Service['rpcbind_service'],
       }
     } elsif $nfs_config_method == 'service' {
       service { 'gss_service':
@@ -96,6 +83,11 @@ class nfsclient (
         name   => $service_name,
         enable => true,
       }
+    }
+
+    $service_subscribe = $nfs_config_method ? {
+      'sysconfig' => File_line['NFS_SECURITY_GSS'],
+      'service'   => Service['gss_service'],
     }
 
     service { $service:
@@ -110,13 +102,13 @@ class nfsclient (
         match  => '^NFS_START_SERVICES=',
         path   => '/etc/sysconfig/nfs',
         line   => 'NFS_START_SERVICES="yes"',
-        notify => ['Service[nfs]', 'Service[rpcbind_service]'],
+        notify => [Service['nfs'], Service['rpcbind_service']],
       }
       file_line { 'MODULES_LOADED_ON_BOOT':
         match  => '^MODULES_LOADED_ON_BOOT=',
         path   => '/etc/sysconfig/kernel',
         line   => 'MODULES_LOADED_ON_BOOT="rpcsec_gss_krb5"',
-        notify => 'Exec[gss-module-modprobe]',
+        notify => Exec['gss-module-modprobe'],
       }
       exec { 'gss-module-modprobe':
         command     => 'modprobe rpcsec_gss_krb5',

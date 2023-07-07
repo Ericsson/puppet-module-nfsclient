@@ -6,6 +6,7 @@ describe 'nfsclient' do
     'RedHat 6' => {
       os: {
         family:  'RedHat',
+        name:    'RedHat',
         release: {
           full:  '6.3',
           major: '6',
@@ -15,6 +16,7 @@ describe 'nfsclient' do
     'RedHat 7' => {
       os: {
         family:  'RedHat',
+        name:    'RedHat',
         release: {
           full:  '7.3',
           major: '7',
@@ -24,6 +26,7 @@ describe 'nfsclient' do
     'RedHat 8' => {
       os: {
         family:  'RedHat',
+        name:    'RedHat',
         release: {
           full:  '8.0',
           major: '8',
@@ -33,6 +36,7 @@ describe 'nfsclient' do
     'Suse 11' => {
       os: {
         family:  'Suse',
+        name:    'SLES',
         release: {
           full:  '11.3',
           major: '11',
@@ -43,6 +47,7 @@ describe 'nfsclient' do
     'Suse 12' => {
       os: {
         family:  'Suse',
+        name:    'SLES',
         release: {
           full:  '12.3',
           major: '12',
@@ -349,7 +354,6 @@ describe 'nfsclient' do
           'enable'    => true,
           'subscribe' => 'File_line[NFS_SECURITY_GSS]',
           'require'   => nil,
-          'provider'  => 'systemd',
         },
       )
     end
@@ -381,7 +385,6 @@ describe 'nfsclient' do
           'enable'    => true,
           'subscribe' => 'File_line[NFS_SECURITY_GSS]',
           'require'   => nil,
-          'provider'  => 'systemd',
         },
       )
     end
@@ -830,7 +833,6 @@ describe 'nfsclient' do
           'enable'    => true,
           'subscribe' => 'File_line[NFS_SECURITY_GSS]',
           'require'   => nil,
-          'provider'  => 'systemd',
         },
       )
     end
@@ -878,7 +880,6 @@ describe 'nfsclient' do
           'enable'    => true,
           'subscribe' => 'File_line[NFS_SECURITY_GSS]',
           'require'   => nil,
-          'provider'  => 'systemd',
         },
       )
     end
