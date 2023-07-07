@@ -8,6 +8,6 @@ fixtures:
       ref: 'v3.0.0'
     nfs:
       repo: 'https://github.com/ghoneycutt/puppet-module-nfs.git'
-      ref: 'v1.11.3'
+      ref: 'v2.3.0'
   symlinks:
     nfsclient: "#{source_dir}"
