@@ -102,7 +102,7 @@ class nfsclient (
         match  => '^NFS_START_SERVICES=',
         path   => '/etc/sysconfig/nfs',
         line   => 'NFS_START_SERVICES="yes"',
-        notify => [Service['nfs'], Service['rpcbind_service']],
+        notify => [Service[$service], Service['rpcbind_service']],
       }
       file_line { 'MODULES_LOADED_ON_BOOT':
         match  => '^MODULES_LOADED_ON_BOOT=',
