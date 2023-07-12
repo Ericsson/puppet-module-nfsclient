@@ -1,2 +1,3 @@
 ---
-nfsclient::service: 'nfs'
+nfsclient::service:           'nfs'
+nfsclient::include_sysconfig: true

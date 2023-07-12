@@ -1,2 +1,3 @@
 ---
-nfsclient::nfs_config_method: 'sysconfig'
+nfsclient::nfs_config_method:  'sysconfig'
+nfsclient::include_nfs_config: true

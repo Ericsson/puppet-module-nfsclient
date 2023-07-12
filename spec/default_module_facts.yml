@@ -1,8 +1,0 @@
----
-osfamily: 'RedHat'             # used in rpcbind
-operatingsystemmajrelease: '7' # used in nfs::idmap
-os:
-  family:  'RedHat'
-  release:
-    major: '7'      # used in nfs::idmap
-    full:  '7.5'

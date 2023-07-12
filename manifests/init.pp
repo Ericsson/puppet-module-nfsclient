@@ -45,24 +45,33 @@
 # @param service
 #   Name of RPC service.
 #
+# @param include_idmap
+#   Switch to decide if nfs::idmap should be included.
+#
+# @param include_nfs_config
+#   Switch to decide if service nfs-config should be included and started.
+#
+# @param include_sysconfig
+#   Switch to decide if nfs & kernel files in /etc/sysconfig/ should be configured.
+#
 class nfsclient (
-  Boolean                        $gss               = false,
-  Optional[Stdlib::Absolutepath] $keytab            = undef,
-  Optional[String[1]]            $service_name      = undef,
-  Optional[String[1]]            $gss_line          = undef,
-  Optional[String[1]]            $keytab_line       = undef,
-  Stdlib::Absolutepath           $nfs_sysconf       = '/etc/sysconfig/nfs',
-  String[1]                      $nfs_config_method = 'sysconfig',
-  String[1]                      $service           = 'rpc-gssd',
+  Boolean                        $gss                = false,
+  Optional[Stdlib::Absolutepath] $keytab             = undef,
+  Optional[String[1]]            $service_name       = undef,
+  Optional[String[1]]            $gss_line           = undef,
+  Optional[String[1]]            $keytab_line        = undef,
+  Stdlib::Absolutepath           $nfs_sysconf        = '/etc/sysconfig/nfs',
+  String[1]                      $nfs_config_method  = 'sysconfig',
+  String[1]                      $service            = 'rpc-gssd',
+  Boolean                        $include_idmap      = false,
+  Boolean                        $include_nfs_config = false,
+  Boolean                        $include_sysconfig  = false,
 ) {
-  case $facts['os']['name'] {
-    'RedHat': {
-      include nfs::idmap
-      $nfs_requires = Service['idmapd_service']
-    }
-    default: {
-      $nfs_requires = undef
-    }
+  if $include_idmap {
+    include nfs::idmap
+    $nfs_requires = Service['idmapd_service']
+  } else {
+    $nfs_requires = undef
   }
 
   if $gss {
@@ -97,7 +106,7 @@ class nfsclient (
       require   => $nfs_requires,
     }
 
-    if "${facts['os']['family']}-${facts['os']['release']['full']}" =~ /^Suse-11/ {
+    if $include_sysconfig {
       file_line { 'NFS_START_SERVICES':
         match  => '^NFS_START_SERVICES=',
         path   => '/etc/sysconfig/nfs',
@@ -132,12 +141,17 @@ class nfsclient (
       }
     }
 
-    if "${facts['os']['family']}-${facts['os']['release']['full']}" =~ /^RedHat-7/ {
+    if include_nfs_config {
+      if $nfs_config_method == 'sysconfig' {
+        $nfs_config_subscribe = File_line['GSSD_OPTIONS']
+      } else {
+        $nfs_config_subscribe = undef
+      }
       exec { 'nfs-config':
         command     => 'service nfs-config start',
         path        => '/sbin:/usr/sbin',
         refreshonly => true,
-        subscribe   => File_line['GSSD_OPTIONS'],
+        subscribe   => $nfs_config_subscribe,
       }
       if $gss {
         Exec['nfs-config'] ~> Service[$service]
