@@ -74,6 +74,14 @@ class nfsclient (
     $nfs_requires = undef
   }
 
+  if $nfs_config_method == 'sysconfig' {
+    $nfs_config_subscribe = File_line['GSSD_OPTIONS']
+    $service_subscribe    = File_line['NFS_SECURITY_GSS']
+  } else {
+    $nfs_config_subscribe = undef
+    $service_subscribe    = Service['gss_service']
+  }
+
   if $gss {
     $_gssd_options_notify = [Service['rpcbind_service'], Service[$service]]
 
@@ -92,11 +100,6 @@ class nfsclient (
         name   => $service_name,
         enable => true,
       }
-    }
-
-    $service_subscribe = $nfs_config_method ? {
-      'sysconfig' => File_line['NFS_SECURITY_GSS'],
-      'service'   => Service['gss_service'],
     }
 
     service { $service:
@@ -142,11 +145,6 @@ class nfsclient (
     }
 
     if include_nfs_config {
-      if $nfs_config_method == 'sysconfig' {
-        $nfs_config_subscribe = File_line['GSSD_OPTIONS']
-      } else {
-        $nfs_config_subscribe = undef
-      }
       exec { 'nfs-config':
         command     => 'service nfs-config start',
         path        => '/sbin:/usr/sbin',
