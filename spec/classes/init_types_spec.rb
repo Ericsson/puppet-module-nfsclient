@@ -21,6 +21,12 @@ describe 'nfsclient' do
             invalid: ['true', 'false', 'string', ['array'], { 'ha' => 'sh' }, 3, 2.42, nil],
             message: 'expects a Boolean',
           },
+          'Enum[service, sysconfig]' => {
+            name:    ['nfs_config_method'],
+            valid:   ['service', 'sysconfig'],
+            invalid: ['string', ['array'], { 'ha' => 'sh' }, 3, 2.42, false],
+            message: 'expects a match for Enum',
+          },
           'Optional[String[1]]' => {
             name:    ['service_name', 'gss_line', 'keytab_line'],
             valid:   ['valid'],
@@ -34,7 +40,7 @@ describe 'nfsclient' do
             message: 'expects a Stdlib::Absolutepath',
           },
           'String[1]' => {
-            name:    ['nfs_config_method', 'service'],
+            name:    ['service'],
             valid:   ['string'],
             invalid: [['array'], { 'ha' => 'sh' }, 3, 2.42, true, false],
             message: 'expects a String',

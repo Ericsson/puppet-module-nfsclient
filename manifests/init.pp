@@ -61,7 +61,7 @@ class nfsclient (
   Optional[String[1]]            $gss_line           = undef,
   Optional[String[1]]            $keytab_line        = undef,
   Stdlib::Absolutepath           $nfs_sysconf        = '/etc/sysconfig/nfs',
-  String[1]                      $nfs_config_method  = 'sysconfig',
+  Enum['service', 'sysconfig']   $nfs_config_method  = 'sysconfig',
   String[1]                      $service            = 'rpc-gssd',
   Boolean                        $include_idmap      = false,
   Boolean                        $include_nfs_config = false,
