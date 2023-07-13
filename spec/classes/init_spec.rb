@@ -261,6 +261,13 @@ describe 'nfsclient', type: :class do
         end
       end
 
+      context 'with include_nfs_config set to valid true when gss is true and keytab is valid' do
+        let(:params) { { include_nfs_config: true, gss: true, keytab: '/dummy' } }
+
+        it { is_expected.to contain_exec('nfs-config').with_notify(["Service[#{service}]"]) }
+        it { is_expected.to contain_Service('rpcbind_service').with_before(["Service[#{service}]"]) }
+      end
+
       context 'with include_nfs_config set to valid true when keytab is valid and nfs_config_method is service' do
         let(:params) { { include_nfs_config: true, keytab: '/dummy', nfs_config_method: 'service' } }
 
