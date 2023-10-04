@@ -1,0 +1,3 @@
+---
+nfsclient::service: 'rpcgssd'
+nfsclient::nfs_config_method: 'sysconfig'

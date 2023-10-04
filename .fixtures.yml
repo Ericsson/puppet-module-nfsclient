@@ -2,12 +2,12 @@ fixtures:
   repositories:
     stdlib:
       repo: 'https://github.com/puppetlabs/puppetlabs-stdlib.git'
-      ref: '5.2.0'
+      ref: 'v8.0.0'
     rpcbind:
       repo: 'https://github.com/ghoneycutt/puppet-module-rpcbind.git'
-      ref: 'v1.8.0'
+      ref: 'v3.0.0'
     nfs:
       repo: 'https://github.com/ghoneycutt/puppet-module-nfs.git'
-      ref: 'v1.11.3'
+      ref: 'v2.3.0'
   symlinks:
     nfsclient: "#{source_dir}"

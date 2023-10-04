@@ -1,4 +1,0 @@
----
-operatingsystemmajrelease: '7' # used in nfs::idmap
-operatingsystemrelease: '7.5'
-osfamily: 'RedHat'

@@ -1,0 +1,6 @@
+---
+nfsclient::service_name:      'auth-rpcgss-module.service'
+nfsclient::gss_line:          'SECURE_NFS'
+nfsclient::keytab_line:       'RPCGSSDARGS'
+nfsclient::nfs_config_method: 'service'
+nfsclient::include_idmap:     true
