@@ -1,5 +1,5 @@
 ---
-nfsclient::service_name:      'auth-rpcgss-module.service'
+nfsclient::service_name:      'gssproxy'
 nfsclient::gss_line:          'SECURE_NFS'
 nfsclient::keytab_line:       'RPCGSSDARGS'
 nfsclient::nfs_config_method: 'service'
