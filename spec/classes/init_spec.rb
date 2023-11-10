@@ -8,7 +8,6 @@ describe 'nfsclient', type: :class do
       # define os specific defaults
       case facts[:os]['family']
       when 'RedHat'
-        service_name      = 'auth-rpcgss-module.service'
         gss_line          = 'SECURE_NFS'
         keytab_line       = 'RPCGSSDARGS'
         nfs_requires      = 'Service[idmapd_service]'
@@ -18,8 +17,12 @@ describe 'nfsclient', type: :class do
           nfs_config_method = 'sysconfig'
         when '7'
           nfs_config_method = 'sysconfig'
+        when '8'
+          nfs_config_method = 'service'
+          service_name      = 'auth-rpcgss-module.service'
         else
           nfs_config_method = 'service'
+          service_name      = 'gssproxy'
         end
       when 'Suse'
         gss_line          = 'NFS_SECURITY_GSS'
