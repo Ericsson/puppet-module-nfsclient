@@ -144,7 +144,7 @@ class nfsclient (
       }
     }
 
-    if include_nfs_config {
+    if $include_nfs_config {
       exec { 'nfs-config':
         command     => 'service nfs-config start',
         path        => '/sbin:/usr/sbin',

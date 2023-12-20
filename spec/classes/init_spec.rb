@@ -42,6 +42,13 @@ describe 'nfsclient', type: :class do
       nfs_config_method = 'sysconfig' if nfs_config_method.nil?
       service           = 'rpc-gssd' if service.nil?
 
+      # Helper variables
+      nfs_config_subscribe = if nfs_config_method == 'sysconfig'
+                               'File_line[GSSD_OPTIONS]'
+                             else
+                               nil
+                             end
+
       context 'with all defaults' do
         let(:params) { {} }
 
@@ -249,40 +256,71 @@ describe 'nfsclient', type: :class do
         end
       end
 
-      context 'with include_nfs_config set to valid true when keytab is valid and nfs_config_method is sysconfig' do
-        let(:params) { { include_nfs_config: true, keytab: '/dummy', nfs_config_method: 'sysconfig' } }
+      describe 'with keytab is set' do
+        let(:params) { { keytab: '/dummy' } }
 
-        it do
-          is_expected.to contain_exec('nfs-config').only_with(
-            {
-              'command'     => 'service nfs-config start',
-              'path'        => '/sbin:/usr/sbin',
-              'refreshonly' => true,
-              'subscribe'   => 'File_line[GSSD_OPTIONS]',
-            },
-          )
+        if nfs_config_method == 'sysconfig'
+          it { is_expected.to contain_file_line('GSSD_OPTIONS') }
+        else
+          it { is_expected.not_to contain_file_line('GSSD_OPTIONS') }
         end
-      end
 
-      context 'with include_nfs_config set to valid true when gss is true and keytab is valid' do
-        let(:params) { { include_nfs_config: true, gss: true, keytab: '/dummy' } }
+        context 'with include_nfs_config set to false' do
+          let(:params) { super().merge({ include_nfs_config: false }) }
 
-        it { is_expected.to contain_exec('nfs-config').with_notify(["Service[#{service}]"]) }
-        it { is_expected.to contain_Service('rpcbind_service').with_before(["Service[#{service}]"]) }
-      end
+          it { is_expected.not_to contain_exec('nfs-config') }
+        end
 
-      context 'with include_nfs_config set to valid true when keytab is valid and nfs_config_method is service' do
-        let(:params) { { include_nfs_config: true, keytab: '/dummy', nfs_config_method: 'service' } }
+        context 'with include_nfs_config set to true' do
+          let(:params) { super().merge({ include_nfs_config: true }) }
 
-        it do
-          is_expected.to contain_exec('nfs-config').only_with(
-            {
-              'command'     => 'service nfs-config start',
-              'path'        => '/sbin:/usr/sbin',
-              'refreshonly' => true,
-              'subscribe'   => nil,
-            },
-          )
+          it do
+            is_expected.to contain_exec('nfs-config').only_with(
+              {
+                'command'     => 'service nfs-config start',
+                'path'        => '/sbin:/usr/sbin',
+                'refreshonly' => true,
+                'subscribe'   => nfs_config_subscribe,
+              },
+            )
+          end
+
+          context 'with nfs_config_method set to service' do
+            let(:params) { super().merge({ nfs_config_method: 'service' }) }
+
+            it do
+              is_expected.to contain_exec('nfs-config').only_with(
+                {
+                  'command'     => 'service nfs-config start',
+                  'path'        => '/sbin:/usr/sbin',
+                  'refreshonly' => true,
+                  'subscribe'   => nil,
+                },
+              )
+            end
+          end
+
+          context 'with nfs_config_method set to sysconfig' do
+            let(:params) { super().merge({ nfs_config_method: 'sysconfig' }) }
+
+            it do
+              is_expected.to contain_exec('nfs-config').only_with(
+                {
+                  'command'     => 'service nfs-config start',
+                  'path'        => '/sbin:/usr/sbin',
+                  'refreshonly' => true,
+                  'subscribe'   => 'File_line[GSSD_OPTIONS]',
+                },
+              )
+            end
+          end
+
+          context 'with gss set to true' do
+            let(:params) { super().merge({ gss: true }) }
+
+            it { is_expected.to contain_exec('nfs-config').with_notify(["Service[#{service}]"]) }
+            it { is_expected.to contain_Service('rpcbind_service').with_before(["Service[#{service}]"]) }
+          end
         end
       end
 
