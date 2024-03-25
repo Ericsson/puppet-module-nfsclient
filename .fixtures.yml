@@ -7,7 +7,7 @@ fixtures:
       repo: 'https://github.com/ghoneycutt/puppet-module-rpcbind.git'
       ref: 'v3.0.0'
     nfs:
-      repo: 'https://github.com/kodguru/puppet-module-nfs.git'
+      repo: 'https://github.com/ericsson/puppet-module-nfs.git'
       ref: 'v2.4.0'
   symlinks:
     nfsclient: "#{source_dir}"

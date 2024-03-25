@@ -1,12 +1,12 @@
 {
-  "name": "kodguru-nfsclient",
+  "name": "ericsson-nfsclient",
   "version": "1.4.1",
-  "author": "kodguru",
+  "author": "ericsson",
   "summary": "Manage nfs client",
   "license": "Apache-2.0",
-  "source": "git://github.com/kodguru/puppet-module-nfsclient.git",
-  "project_page": "https://github.com/kodguru/puppet-module-nfsclient",
-  "issues_url": "https://github.com/kodguru/puppet-module-nfsclient/issues",
+  "source": "git://github.com/ericsson/puppet-module-nfsclient.git",
+  "project_page": "https://github.com/ericsson/puppet-module-nfsclient",
+  "issues_url": "https://github.com/ericsson/puppet-module-nfsclient/issues",
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
@@ -17,7 +17,7 @@
       "version_requirement": ">= 3.0.0 < 4.0.0"
     },
     {
-      "name": "kodguru/nfs",
+      "name": "ericsson/nfs",
       "version_requirement": ">= 2.4.0 < 3.0.0"
     }
   ],

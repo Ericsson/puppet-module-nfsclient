@@ -1,9 +1,6 @@
 puppet-module-nfsclient
 =======================
 
-[![Build Status](
-https://api.travis-ci.org/kodguru/puppet-module-nfsclient.png?branch=master)](https://travis-ci.org/kodguru/puppet-module-nfsclient)
-
 Puppet module to manage nfs client configuration.
 
 # Compatability
@@ -15,7 +12,7 @@ This module aims to support the current and previous major Puppet versions.
 # Note
 
 This module does not manage /etc/krb5.keytab any more.
-Use a Keberos module such as [kodguru/puppet-module-krb5](https://github.com/kodguru/puppet-module-krb5/)
+Use a Keberos module such as [ericsson/puppet-module-krb5](https://github.com/ericsson/puppet-module-krb5/)
 (version 0.8.0 or newer) if you need to manage Kerberos itself.
 
 To ensure the service in restarted when /etc/krb5.keytab is updated you could
